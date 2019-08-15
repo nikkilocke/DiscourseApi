@@ -134,5 +134,12 @@ namespace DiscourseApi {
 		public async Task<GroupMemberList> GetUsers(Api api, ListRequest request = null) {
 			return (GroupMemberList)new GroupMemberList().Convert(await api.GetAsync(Api.Combine("groups", name, "members")));
 		}
+
+		public async Task Update(Api api) {
+			JObject j = new JObject();
+			j["group"] = this.ToJObject();
+			await api.PutAsync(Api.Combine("groups", id), null, j);
+		}
+
 	}
 }

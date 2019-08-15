@@ -335,7 +335,16 @@ namespace DiscourseApi {
 							delay = 1;
 							break;
 						case (HttpStatusCode)429:       // TooManyRequests
+							IEnumerable<string> values;
 							delay = 5000;
+							if (result.Headers.TryGetValues("Retry-After", out values)) {
+								try {
+									int d = 1000 * int.Parse(values.FirstOrDefault());
+									if (d > delay)
+										delay = d;
+								} catch {
+								}
+							}
 							break;
 						case HttpStatusCode.BadGateway:
 						case HttpStatusCode.ServiceUnavailable:

@@ -222,7 +222,7 @@ namespace DiscourseApi {
 		public int uploaded_avatar_id;
 		public int badge_count;
 		public bool has_title_badges;
-		public JObject custom_fields;
+		public JToken custom_fields;
 		public int pending_count;
 		public int profile_view_count;
 		public int recent_time_read;
