@@ -8,9 +8,13 @@
     <PackageProjectUrl>https://github.com/nikkilocke/DiscourseApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikkilocke/DiscourseApi</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <PackageReleaseNotes>Bug fixes:
+Fix throttling retry delay.
+Fix Category and User custom_fields definition.
+Add Category.Update
+Add Group.Update</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

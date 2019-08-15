@@ -127,7 +127,7 @@ namespace DiscourseApi {
 		public string description_excerpt;
 		public int? uploaded_logo;
 		public int? uploaded_background;
-		public JObject custom_fields;
+		public JToken custom_fields;
 		public string[] available_groups;
 		public List<GroupPermission> group_permissions;
 		public bool? can_delete;
@@ -153,6 +153,10 @@ namespace DiscourseApi {
 			return j["category"].ToObject<Category>();
 		}
 
+		public async Task Update(Api api) {
+			await api.PutAsync(Api.Combine("categories", id), null, this);
+		}
+
 		static public async Task Delete(Api api, int categoryId) {
 			await api.DeleteAsync(Api.Combine("categories", categoryId));
 		}
@@ -161,7 +165,7 @@ namespace DiscourseApi {
 	public class CategoryList : ApiEntryBase {
 		public bool can_create_category;
 		public bool can_create_topic;
-		public JObject draft;
+		public string draft;
 		public string draft_key;
 		public int draft_sequence;
 		public List<Category> categories;
