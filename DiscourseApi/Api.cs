@@ -278,6 +278,8 @@ namespace DiscourseApi {
 			}
 		}
 
+		DateTime lastRequest = DateTime.MinValue;
+
 		/// <summary>
 		/// Send a message and get the result.
 		/// Deal with rate limiting return values and redirects.
@@ -287,6 +289,12 @@ namespace DiscourseApi {
 		/// <param name="postParameters">Post parameters as an object or JObject</param>
 		public async Task<HttpResponseMessage> SendMessageAsyncAndGetResponse(HttpMethod method, string uri, object postParameters = null) {
 			for (; ; ) {
+				if (Settings.DelayBetweenApiCalls > 0) {
+					double elapsedSinceLastRequest = (DateTime.Now - lastRequest).TotalMilliseconds;
+					if (elapsedSinceLastRequest < Settings.DelayBetweenApiCalls)
+						await Task.Delay((int)(Settings.DelayBetweenApiCalls - elapsedSinceLastRequest));
+				}
+				lastRequest = DateTime.Now;
 				string content = null;
 				using (DisposableCollection disposeMe = new DisposableCollection()) {
 					var message = disposeMe.Add(new HttpRequestMessage(method, uri));
@@ -316,7 +324,7 @@ namespace DiscourseApi {
 						}
 					}
 					HttpResponseMessage result;
-					int backoff = 500;
+					int backoff = 1000;
 					int delay;
 					if (Settings.LogRequest > 0)
 						Log("Sent -> {0}:{1}", Settings.LogRequest > 1 ? message.ToString() : message.RequestUri.ToString(), content);
@@ -358,7 +366,7 @@ namespace DiscourseApi {
 							return result;
 					}
 					result.Dispose();
-					Thread.Sleep(delay);
+					await Task.Delay(delay);
 				}
 			}
 		}

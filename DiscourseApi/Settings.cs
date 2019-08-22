@@ -38,6 +38,11 @@ namespace DiscourseApi {
 		int LogResult { get; }
 
 		/// <summary>
+		/// Minimum time between Api calls (throttling).
+		/// </summary>
+		int DelayBetweenApiCalls { get; }
+
+		/// <summary>
 		/// After BaseCampApi has update tokens, save the infomation.
 		/// </summary>
 		void Save();
@@ -62,6 +67,11 @@ namespace DiscourseApi {
 		/// Api Username for authentication
 		/// </summary>
 		public string ApiUsername { get; set; }
+
+		/// <summary>
+		/// Minimum time between Api calls (throttling).
+		/// </summary>
+		public int DelayBetweenApiCalls { get; set; }
 
 		/// <summary>
 		/// Set to greater than zero to log all requests going to Basecamp. 

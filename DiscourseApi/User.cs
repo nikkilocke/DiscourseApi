@@ -207,6 +207,12 @@ namespace DiscourseApi {
 
 	}
 
+	public class UserEmails : ApiEntryBase {
+		public string email;
+		public string[] secondary_emails;
+		public string[] associated_accounts;
+	}
+
 	public class User : UserCommon {
 		public DateTime? last_posted_at;
 		public bool can_edit;
@@ -277,8 +283,16 @@ namespace DiscourseApi {
 			return (UserList)new UserList().Convert(j);
 		}
 
+		public static async Task<UserEmails> GetEmailAddresses(Api api, string userName) {
+			return await api.GetAsync<UserEmails>(Api.Combine("u", userName, "emails"));
+		}
+
 		public static async Task<UserCreateResult> Create(Api api, UserCreateData data) {
 			return await api.PostAsync<UserCreateResult>("users", null, data);
+		}
+
+		public static async Task Activate(Api api, int userId) {
+			await api.PutAsync(Api.Combine("admin", "users", userId, "activate"));
 		}
 
 		public static async Task<UserList> ListAll(Api api, string flag, string order = "created", bool ascending = true) {
