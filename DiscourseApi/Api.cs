@@ -336,7 +336,7 @@ namespace DiscourseApi {
 						Log($"Received -> {result}");
 					if (!result.IsSuccessStatusCode) {
 						Error($"Message -> {message}:{content}");
-						Log($"Response -> {result}");
+						Error($"Response -> {result}");
 					}
 					switch (result.StatusCode) {
 						case HttpStatusCode.Found:      // Redirect
