@@ -63,6 +63,9 @@ namespace DiscourseApi {
 		public JToken membership_request_template;
 		public string usernames;
 		public string owner_usernames;
+		public int? members_visibility_level;
+		public bool? can_see_members;
+		public bool? publish_read_state;
 	}
 	public class Group : ApiEntryBase {
 		public int id;
@@ -97,6 +100,9 @@ namespace DiscourseApi {
 		public bool is_group_owner_display;
 		public bool mentionable;
 		public bool messageable;
+		public int? members_visibility_level;
+		public bool? can_see_members;
+		public bool? publish_read_state;
 
 		static public async Task<GroupList> ListAll(Api api) {
 			JObject data = await api.GetAsync("groups");

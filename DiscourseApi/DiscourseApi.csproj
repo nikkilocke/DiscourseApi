@@ -8,9 +8,10 @@
     <PackageProjectUrl>https://github.com/nikkilocke/DiscourseApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikkilocke/DiscourseApi</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Separate error and log streams</PackageReleaseNotes>
+    <PackageReleaseNotes>New options when creating group
+User.Deactivate</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.6</Version>
+    <Version>1.0.8</Version>
   </PropertyGroup>
 
   <ItemGroup>

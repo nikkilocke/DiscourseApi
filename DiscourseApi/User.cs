@@ -295,6 +295,10 @@ namespace DiscourseApi {
 			await api.PutAsync(Api.Combine("admin", "users", userId, "activate"));
 		}
 
+		public static async Task Deactivate(Api api, int userId) {
+			await api.PutAsync(Api.Combine("admin", "users", userId, "deactivate"));
+		}
+
 		public static async Task<UserList> ListAll(Api api, string flag, string order = "created", bool ascending = true) {
 			JObject j = await api.GetAsync(Api.Combine("admin", "users", "list", flag), new {
 				order,
