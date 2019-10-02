@@ -71,6 +71,18 @@ namespace Tests {
 			task.Wait();
 		}
 
+		public static void ShowList<T,L>(Task<L> task) where T:new() where  L : ApiList<T> {
+			ApiList<T> result = RunTest(task);
+			foreach (T o in result.All(Api))
+				Console.WriteLine(o);
+		}
+
+		public static void ShowList<T>(Task<List<T>> task) {
+			List<T> result = RunTest(task);
+			foreach (T o in result)
+				Console.WriteLine(o);
+		}
+
 	}
 	[TestClass]
 	public class UserTests : TestBase {
@@ -143,7 +155,7 @@ namespace Tests {
 	public class GroupTests : TestBase {
 		[TestMethod]
 		public void List() {
-			RunTest(Group.ListAll(Api));
+			ShowList<Group, GroupList>(Group.ListAll(Api));
 		}
 		[TestMethod]
 		public void Get() {

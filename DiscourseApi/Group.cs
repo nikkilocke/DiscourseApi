@@ -10,10 +10,34 @@ namespace DiscourseApi {
 			GroupList g = j.ConvertToObject<GroupList>();
 			g.TotalCount = (int)j["total_rows_groups"];
 			g.List = j["groups"].ToObject<List<Group>>();
+			g._retrievedCount = _retrievedCount + g.List.Count;
 			return g;
 		}
 
-		public override string NextPageUrl { get; set; }
+		int _retrievedCount;
+
+		/// <summary>
+		/// There is data on the server we haven't fetched yet
+		/// </summary>
+		override public bool HasMoreData {
+			get { return RetrievedCount < TotalCount; }
+		}
+
+		public override int RetrievedCount {
+			get { return _retrievedCount; }
+
+		}
+
+		override public string NextPageUrl {
+			get {
+				if (!HasMoreData)
+					return null;
+				return Api.AddGetParams(MetaData.Uri, new {
+					page = page + 1
+				});
+			}
+			set { }
+		}
 	}
 
 	public class GroupMember : ApiEntryBase {
