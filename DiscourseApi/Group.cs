@@ -165,6 +165,20 @@ namespace DiscourseApi {
 			return (GroupMemberList)new GroupMemberList().Convert(await api.GetAsync(Api.Combine("groups", name, "members")));
 		}
 
+		static public async Task MakeOwner(Api api, int groupId, string usernames) {
+			await api.PutAsync(Api.Combine("admin", "groups", groupId, "owners"), null, new {
+				group = new {
+					usernames
+				}
+			});
+		}
+
+		static public async Task RemoveOwner(Api api, int groupId, int user_id) {
+			await api.DeleteAsync(Api.Combine("admin", "groups", groupId, "owners"), null, new {
+				user_id
+			});
+		}
+
 		public async Task Update(Api api) {
 			JObject j = new JObject();
 			j["group"] = this.ToJObject();
