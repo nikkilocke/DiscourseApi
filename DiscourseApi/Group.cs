@@ -161,6 +161,12 @@ namespace DiscourseApi {
 				});
 		}
 
+		static public async Task<JObject> RemoveUsers(Api api, int groupId, params string[] names) {
+			return await api.DeleteAsync(Api.Combine("groups", groupId, "members"), null, new {
+				usernames = string.Join(",", names)
+			});
+		}
+
 		public async Task<GroupMemberList> GetUsers(Api api, ListRequest request = null) {
 			return (GroupMemberList)new GroupMemberList().Convert(await api.GetAsync(Api.Combine("groups", name, "members")));
 		}
