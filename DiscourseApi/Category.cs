@@ -88,6 +88,7 @@ namespace DiscourseApi {
 		public bool? allow_global_tags;
 		public bool? topic_featured_link_allowed;
 		public int? search_priority;
+		public string reviewable_by_group_name;
 	}
 
 	public class UpdateCategoryParams : CategoryCommon {
