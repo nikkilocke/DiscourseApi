@@ -8,9 +8,9 @@
     <PackageProjectUrl>https://github.com/nikkilocke/DiscourseApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikkilocke/DiscourseApi</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Add reviewable_by_group_name to category</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix bug in categories type for uploaded logo/background</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.14</Version>
+    <Version>1.0.15</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -93,8 +93,8 @@ namespace DiscourseApi {
 
 	public class UpdateCategoryParams : CategoryCommon {
 		public Permissions permissions;
-		public int? uploaded_logo_id;
-		public int? uploaded_background_id;
+		public JObject uploaded_logo_id;
+		public JObject uploaded_background_id;
 	}
 
 	public class GroupPermission : ApiEntryBase {
