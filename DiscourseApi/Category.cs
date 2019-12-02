@@ -126,8 +126,8 @@ namespace DiscourseApi {
 		public int? topics_year;
 		public int? topics_all_time;
 		public string description_excerpt;
-		public int? uploaded_logo;
-		public int? uploaded_background;
+		public JObject uploaded_logo;
+		public JObject uploaded_background;
 		public JToken custom_fields;
 		public string[] available_groups;
 		public List<GroupPermission> group_permissions;
