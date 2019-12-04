@@ -56,6 +56,16 @@ namespace DiscourseApi {
 		public event LogHandler ErrorMessage;
 
 		/// <summary>
+		/// The most recent requests sent
+		/// </summary>
+		public string LastRequest;
+
+		/// <summary>
+		/// The most recent response received
+		/// </summary>
+		public string LastResponse;
+
+		/// <summary>
 		/// Post to the Api, returning an object
 		/// </summary>
 		/// <typeparam name="T">The object type expected</typeparam>
@@ -293,6 +303,8 @@ namespace DiscourseApi {
 		/// <param name="uri">The full Uri you want to call (including any get parameters)</param>
 		/// <param name="postParameters">Post parameters as an object or JObject</param>
 		public async Task<HttpResponseMessage> SendMessageAsyncAndGetResponse(HttpMethod method, string uri, object postParameters = null) {
+			LastRequest = "";
+			LastResponse = "";
 			for (; ; ) {
 				if (Settings.DelayBetweenApiCalls > 0) {
 					double elapsedSinceLastRequest = (DateTime.Now - lastRequest).TotalMilliseconds;
@@ -328,18 +340,16 @@ namespace DiscourseApi {
 							message.Content = disposeMe.Add(new FormUrlEncodedContent(postParameters.ToCollection()));
 						}
 					}
+					LastRequest = "{message}:{content}";
 					HttpResponseMessage result;
 					int backoff = 1000;
 					int delay;
 					if (Settings.LogRequest > 0)
 						Log($"Sent -> {(Settings.LogRequest > 1 ? message.ToString() : message.RequestUri.ToString())}:{content}");
 					result = await _client.SendAsync(message);
+					LastResponse = result.ToString();
 					if (Settings.LogResult > 1)
 						Log($"Received -> {result}");
-					if (!result.IsSuccessStatusCode) {
-						Error($"Message -> {message}:{content}");
-						Error($"Response -> {result}");
-					}
 					switch (result.StatusCode) {
 						case HttpStatusCode.Found:      // Redirect
 							uri = result.Headers.Location.AbsoluteUri;
@@ -379,29 +389,35 @@ namespace DiscourseApi {
 		/// </summary>
 		/// <param name="uri">To store in the MetaData</param>
 		async Task<JObject> parseJObjectFromResponse(string uri, HttpResponseMessage result) {
-			JObject j = null;
-			string data = await result.Content.ReadAsStringAsync();
-			if (data.StartsWith("{")) {
-				j = JObject.Parse(data);
-			} else if (data.StartsWith("[")) {
-				j = new JObject {
-					["List"] = JArray.Parse(data)
-				};
-			} else {
-				j = new JObject();
-				if (!string.IsNullOrEmpty(data))
-					j["content"] = data;
+			try {
+				JObject j = null;
+				string data = await result.Content.ReadAsStringAsync();
+				LastResponse += "\n" + data;
+				if (data.StartsWith("{")) {
+					j = JObject.Parse(data);
+				} else if (data.StartsWith("[")) {
+					j = new JObject {
+						["List"] = JArray.Parse(data)
+					};
+				} else {
+					j = new JObject();
+					if (!string.IsNullOrEmpty(data))
+						j["content"] = data;
+				}
+				JObject metadata = new JObject();
+				metadata["Uri"] = uri;
+				IEnumerable<string> values;
+				if (result.Headers.TryGetValues("Last-Modified", out values)) metadata["Modified"] = values.FirstOrDefault();
+				j["MetaData"] = metadata;
+				if (Settings.LogResult > 0 || !result.IsSuccessStatusCode)
+					Log("Received Data -> " + j);
+				if (!result.IsSuccessStatusCode)
+					throw new ApiException(result.ReasonPhrase, j);
+				return j;
+			} catch (Exception ex) {
+				Error($"{ex.Message}\n{LastRequest}\n{LastResponse}");
+				throw;
 			}
-			JObject metadata = new JObject();
-			metadata["Uri"] = uri;
-			IEnumerable<string> values;
-			if (result.Headers.TryGetValues("Last-Modified", out values)) metadata["Modified"] = values.FirstOrDefault();
-			j["MetaData"] = metadata;
-			if (Settings.LogResult > 0 || !result.IsSuccessStatusCode)
-				Log("Received Data -> " + j);
-			if (!result.IsSuccessStatusCode)
-				throw new ApiException(result.ReasonPhrase, j);
-			return j;
 		}
 
 		/// <summary>
