@@ -340,7 +340,7 @@ namespace DiscourseApi {
 							message.Content = disposeMe.Add(new FormUrlEncodedContent(postParameters.ToCollection()));
 						}
 					}
-					LastRequest = "{message}:{content}";
+					LastRequest = $"{message}:{content}";
 					HttpResponseMessage result;
 					int backoff = 1000;
 					int delay;
