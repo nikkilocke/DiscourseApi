@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DiscourseApi {
@@ -9,6 +9,8 @@ namespace DiscourseApi {
 		public override ApiList<Group> Convert(JObject j) {
 			GroupList g = j.ConvertToObject<GroupList>();
 			g.TotalCount = (int)j["total_rows_groups"];
+			if (Api.QueryParams(g.MetaData.Uri).TryGetValue("page", out string p))
+				g.page = int.Parse(p);
 			g.List = j["groups"].ToObject<List<Group>>();
 			g._retrievedCount = _retrievedCount + g.List.Count;
 			return g;

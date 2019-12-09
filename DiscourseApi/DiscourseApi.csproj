@@ -8,9 +8,9 @@
     <PackageProjectUrl>https://github.com/nikkilocke/DiscourseApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikkilocke/DiscourseApi</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Fix missing $ in string</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix bug in groups lists - only returned first 2 pages.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.18</Version>
+    <Version>1.0.20</Version>
   </PropertyGroup>
 
   <ItemGroup>
