@@ -8,9 +8,9 @@
     <PackageProjectUrl>https://github.com/nikkilocke/DiscourseApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikkilocke/DiscourseApi</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Fix missing $ in string</PackageReleaseNotes>
+    <PackageReleaseNotes>Use special format for DateTime in Post Parameters</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.18</Version>
+    <Version>1.0.19</Version>
   </PropertyGroup>
 
   <ItemGroup>

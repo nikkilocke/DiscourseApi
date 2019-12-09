@@ -27,7 +27,7 @@ namespace DiscourseApi {
 
 		/// <summary>
 		/// Convert object to Json string. 
-		/// Note Enums are converted as strings, and Dates as Unix msec timestamps.
+		/// Note Enums are converted as strings, and Dates as json strings.
 		/// </summary>
 		public static string ToJson(this object o) {
 			return Newtonsoft.Json.JsonConvert.SerializeObject(o, Newtonsoft.Json.Formatting.Indented, _apiSettings);
@@ -37,6 +37,9 @@ namespace DiscourseApi {
 			switch (token.Type) {
 				case JTokenType.Boolean:
 					return token.ToString().ToLower();
+				case JTokenType.Date:
+					DateTime d = token.ToObject<DateTime>();
+					return d.ToString("yyyy-MM-ddThh:mm:ss.fff") + "Z";
 				default:
 					return token.ToString();
 			}
