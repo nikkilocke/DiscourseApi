@@ -193,5 +193,9 @@ namespace DiscourseApi {
 			await api.PutAsync(Api.Combine("groups", id), null, j);
 		}
 
+		static public async Task Delete(Api api, int groupId) {
+			await api.DeleteAsync(Api.Combine("admin", "groups", groupId));
+		}
+
 	}
 }
