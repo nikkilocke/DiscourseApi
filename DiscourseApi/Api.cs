@@ -1,21 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Threading;
-using System.Net.Sockets;
-using System.Net;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
-using System.Linq;
-using System.IO;
+using System.Threading.Tasks;
 
-namespace DiscourseApi {
+namespace DiscourseApi
+{
 	public class Api : IDisposable {
 		HttpClient _client;
 
