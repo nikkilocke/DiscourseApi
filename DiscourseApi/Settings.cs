@@ -47,6 +47,10 @@ namespace DiscourseApi {
 		/// </summary>
 		void Save();
 
+		/// <summary>
+		/// Instructs Discourse to skip validaiton for the request. Can help bypass rate/spam prevention issues.
+		/// </summary>
+		bool SkipValidations { get; }
 	}
 
 	public class Settings : ISettings {
@@ -84,6 +88,11 @@ namespace DiscourseApi {
 		/// Larger numbers give more verbose logging.
 		/// </summary>
 		public int LogResult { get; set; }
+
+		/// <summary>
+		/// Instructs Discourse to skip validaiton for the request. Can help bypass rate/spam prevention issues.
+		/// </summary>
+		public bool SkipValidations { get; set; }
 
 		[JsonIgnore]
 		public string Filename;

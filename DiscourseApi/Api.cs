@@ -77,6 +77,10 @@ namespace DiscourseApi {
 			if (typeof(ApiList).IsAssignableFrom(typeof(T))) {
 				JObject r = (getParameters == null ? (object)new ListRequest() : getParameters).ToJObject();
 				r["PostParameters"] = postParameters.ToJObject();
+				
+				if (Settings.SkipValidations)
+					r["PostParameters"].AddAfterSelf(new { skip_validations = Settings.SkipValidations });
+
 				j["Request"] = r;
 			}
 			return convertTo<T>(j);
