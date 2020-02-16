@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DiscourseApi {
@@ -173,12 +172,12 @@ namespace DiscourseApi {
 		public string last_poster_username;
 		public List<JToken> posters;
 
-		static public async Task<TopicListReturn> ListAll(Api api, int categoryId, int? parentCategoryId = null) {
+		public static async Task<TopicListReturn> ListAll(Api api, int categoryId, int? parentCategoryId = null) {
 			return await api.GetAsync<TopicListReturn>(parentCategoryId > 0 ?
 				Api.Combine("c", (int)parentCategoryId, categoryId) : Api.Combine("c", categoryId));
 		}
 
-		static public async Task<Post> Create(Api api, int categoryId, string title, string message, 
+		public static async Task<Post> Create(Api api, int categoryId, string title, string message, 
 				string api_username = null, DateTime? created_at = null) {
 			return await api.PostAsync<Post>("posts", null, new {
 				title,
@@ -189,25 +188,22 @@ namespace DiscourseApi {
 			});
 		}
 
-		static public async Task<FullTopic> Get(Api api, int topicId) {
+		public static async Task<FullTopic> Get(Api api, int topicId) {
 			return await api.GetAsync<FullTopic>(Api.Combine("t", topicId));
 		}
 
-		static public async Task<JObject> Update(Api api, int topicId, string title, int? categoryId = null) {
+		public static async Task<JObject> Update(Api api, int topicId, string title, int? categoryId = null) {
 			return await api.PutAsync(Api.Combine("t", "-", topicId), null, new {
 				title,
 				category_id = categoryId
 			});
 		}
 
-		static public async Task<JObject> ChangePostOwners(Api api, int topicId, string username, params int [] post_ids) {
+		public static async Task<JObject> ChangePostOwners(Api api, int topicId, string username, params int [] post_ids) {
 			return await api.PostAsync(Api.Combine("t", topicId, "change-owner"), null, new {
 				username,
 				post_ids
 			});
 		}
-
-	}
-
-
+    }
 }
