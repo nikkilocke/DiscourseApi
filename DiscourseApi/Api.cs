@@ -1,21 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Threading;
-using System.Net.Sockets;
-using System.Net;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
-using System.Linq;
-using System.IO;
+using System.Threading.Tasks;
 
-namespace DiscourseApi {
+namespace DiscourseApi
+{
 	public class Api : IDisposable {
 		HttpClient _client;
 
@@ -76,7 +71,18 @@ namespace DiscourseApi {
 			JObject j = await PostAsync(application, getParameters, postParameters);
 			if (typeof(ApiList).IsAssignableFrom(typeof(T))) {
 				JObject r = (getParameters == null ? (object)new ListRequest() : getParameters).ToJObject();
-				r["PostParameters"] = postParameters.ToJObject();
+
+				if (Settings.SkipValidations)
+				{
+					var postParamsList = postParameters.ToCollection().ToList();
+					postParamsList.Add(new KeyValuePair<string, string>("skip_validations", "true"));
+					r["PostParameters"] = postParamsList.ToJObject();
+				}
+				else
+				{
+					r["PostParameters"] = postParameters.ToJObject();
+				}
+
 				j["Request"] = r;
 			}
 			return convertTo<T>(j);
@@ -321,6 +327,7 @@ namespace DiscourseApi {
 						message.Headers.Add("Api-Username", Settings.ApiUsername);
 					message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 					message.Headers.Add("User-Agent", Settings.ApplicationName);
+
 					if (postParameters != null) {
 						if (postParameters is FileStream f) {
 							content = Path.GetFileName(f.Name);
@@ -336,10 +343,23 @@ namespace DiscourseApi {
 						} else if (postParameters is HttpContent) {
 							message.Content = (HttpContent)postParameters;
 						} else {
-							content = postParameters.ToJson();
-							message.Content = disposeMe.Add(new FormUrlEncodedContent(postParameters.ToCollection()));
+
+							if (Settings.SkipValidations)
+							{
+								var postParamsList = postParameters.ToCollection().ToList();
+								postParamsList.Add(new KeyValuePair<string, string>("skip_validations", "true"));
+								content = postParamsList.ToJson();
+								message.Content = disposeMe.Add(new FormUrlEncodedContent(postParamsList));
+							}
+							else
+							{
+								content = postParameters.ToJson();
+								message.Content = disposeMe.Add(new FormUrlEncodedContent(postParameters.ToCollection()));
+							}
+
 						}
 					}
+
 					LastRequest = $"{message}:{content}";
 					HttpResponseMessage result;
 					int backoff = 1000;
