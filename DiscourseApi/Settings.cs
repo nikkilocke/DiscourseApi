@@ -43,12 +43,12 @@ namespace DiscourseApi {
 		int DelayBetweenApiCalls { get; }
 
 		/// <summary>
-		/// After BaseCampApi has update tokens, save the infomation.
+		/// After BaseCampApi has update tokens, save the information.
 		/// </summary>
 		void Save();
 
 		/// <summary>
-		/// Instructs Discourse to skip validaiton for the request. Can help bypass rate/spam prevention issues.
+		/// Instructs Discourse to skip validation for the request. Can help bypass rate/spam prevention issues.
 		/// </summary>
 		bool SkipValidations { get; }
 	}
@@ -90,7 +90,7 @@ namespace DiscourseApi {
 		public int LogResult { get; set; }
 
 		/// <summary>
-		/// Instructs Discourse to skip validaiton for the request. Can help bypass rate/spam prevention issues.
+		/// Instructs Discourse to skip validation for the request. Can help bypass rate/spam prevention issues.
 		/// </summary>
 		public bool SkipValidations { get; set; }
 
