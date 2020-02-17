@@ -206,5 +206,10 @@ namespace DiscourseApi {
 				post_ids
 			});
 		}
-    }
+
+        public static async Task Delete(Api api, int topicId)
+        {
+            await api.DeleteAsync(Api.Combine("t", topicId));
+        }
+	}
 }
