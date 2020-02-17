@@ -178,13 +178,14 @@ namespace DiscourseApi {
 		}
 
 		public static async Task<Post> Create(Api api, int categoryId, string title, string message, 
-				string api_username = null, DateTime? created_at = null) {
+				string api_username = null, DateTime? created_at = null, IEnumerable<string> tags = null) {
 			return await api.PostAsync<Post>("posts", null, new {
 				title,
 				category = categoryId,
 				raw = message,
 				api_username,
-				created_at
+				created_at,
+				tags
 			});
 		}
 
