@@ -308,6 +308,13 @@ namespace DiscourseApi {
 			return (UserList)new UserList().Convert(j);
 		}
 
+		public static async Task Delete(Api api, int userId, bool delete_posts = true) {
+			await api.DeleteAsync(Api.Combine("admin", "users", userId), null, new {
+				context = "/admin/users/" + userId,
+				delete_posts
+			});
+		}
+
 	}
 
 

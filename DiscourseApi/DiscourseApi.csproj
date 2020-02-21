@@ -8,9 +8,10 @@
     <PackageProjectUrl>https://github.com/nikkilocke/DiscourseApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikkilocke/DiscourseApi</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Added Topic.Delete</PackageReleaseNotes>
+    <PackageReleaseNotes>Added User.Delete</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.22</Version>
+    <Version>1.0.23</Version>
+    <AssemblyVersion>1.0.23.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
