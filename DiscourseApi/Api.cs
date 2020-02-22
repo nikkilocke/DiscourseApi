@@ -328,36 +328,52 @@ namespace DiscourseApi
 					message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 					message.Headers.Add("User-Agent", Settings.ApplicationName);
 
-					if (postParameters != null) {
-						if (postParameters is FileStream f) {
-							content = Path.GetFileName(f.Name);
-							f.Position = 0;
-							message.Content = disposeMe.Add(new StreamContent(f));
-							string contentType = MimeMapping.MimeUtility.GetMimeMapping(content);
-							message.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-							message.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") {
-								FileName = content
-							};
-							message.Content.Headers.ContentLength = f.Length;
-							content = "File: " + content;
-						} else if (postParameters is HttpContent) {
-							message.Content = (HttpContent)postParameters;
-						} else {
+                    if (postParameters != null)
+                    {
+                        if (postParameters is FileStream f)
+                        {
+                            content = Path.GetFileName(f.Name);
+                            f.Position = 0;
+                            message.Content = disposeMe.Add(new StreamContent(f));
+                            string contentType = MimeMapping.MimeUtility.GetMimeMapping(content);
+                            message.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                            message.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                            {
+                                FileName = content
+                            };
+                            message.Content.Headers.ContentLength = f.Length;
+                            content = "File: " + content;
+                        }
+                        else if (postParameters is HttpContent parameters)
+                        {
+                            message.Content = parameters;
+                        }
+                        else
+                        {
+                            if (Settings.SkipValidations)
+                            {
+                                var postParamsList = postParameters.ToCollection().ToList();
+                                postParamsList.Add(new KeyValuePair<string, string>("skip_validations", "true"));
+                                content = postParamsList.ToJson();
+                                message.Content = disposeMe.Add(new FormUrlEncodedContent(postParamsList));
+                            }
+                            else
+                            {
+                                content = postParameters.ToJson();
+                                message.Content =
+                                    disposeMe.Add(new FormUrlEncodedContent(postParameters.ToCollection()));
+                            }
 
-							if (Settings.SkipValidations)
-							{
-								var postParamsList = postParameters.ToCollection().ToList();
-								postParamsList.Add(new KeyValuePair<string, string>("skip_validations", "true"));
-								content = postParamsList.ToJson();
-								message.Content = disposeMe.Add(new FormUrlEncodedContent(postParamsList));
-							}
-							else
-							{
-								content = postParameters.ToJson();
-								message.Content = disposeMe.Add(new FormUrlEncodedContent(postParameters.ToCollection()));
-							}
-
-						}
+                        }
+                    }
+                    else if (method != HttpMethod.Get && Settings.SkipValidations) 
+                    {
+                        // add in a skip_validations parameter if required for methods that change objects
+						var postParamsList = new List<KeyValuePair<string, string>> {
+                            new KeyValuePair<string, string>("skip_validations", "true")
+                        };
+                        content = postParamsList.ToJson();
+                        message.Content = disposeMe.Add(new FormUrlEncodedContent(postParamsList));
 					}
 
 					LastRequest = $"{message}:{content}";
