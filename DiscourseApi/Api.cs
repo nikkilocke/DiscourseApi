@@ -350,21 +350,18 @@ namespace DiscourseApi
                         }
                         else
                         {
-                            if (Settings.SkipValidations)
-                            {
-                                var postParamsList = postParameters.ToCollection().ToList();
-                                postParamsList.Add(new KeyValuePair<string, string>("skip_validations", "true"));
-                                content = postParamsList.ToJson();
-                                message.Content = disposeMe.Add(new FormUrlEncodedContent(postParamsList));
-                            }
-                            else
-                            {
-                                content = postParameters.ToJson();
-                                message.Content =
-                                    disposeMe.Add(new FormUrlEncodedContent(postParameters.ToCollection()));
-                            }
+                            var postParamsList = postParameters.ToCollection().ToList();
+                            var form = new MultipartFormDataContent();
 
-                        }
+							if (Settings.SkipValidations)
+								postParamsList.Add(new KeyValuePair<string, string>("skip_validations", "true"));
+
+                            foreach (var kvp in postParamsList)
+                                form.Add(new StringContent(kvp.Value), kvp.Key);
+
+                            content = postParamsList.ToJson();
+                            message.Content = disposeMe.Add(form);
+						}
                     }
                     else if (method != HttpMethod.Get && Settings.SkipValidations) 
                     {
