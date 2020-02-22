@@ -19,7 +19,7 @@ namespace DiscourseApi {
 		public int draft_sequence;
 		public int per_page;
 		public List<Topic> topics;
-	}
+    }
 
 	public class TopicListReturn : ApiEntry {
 		public List<TopicUser> users;
@@ -172,9 +172,14 @@ namespace DiscourseApi {
 		public string last_poster_username;
 		public List<JToken> posters;
 
-		public static async Task<TopicListReturn> ListAll(Api api, int categoryId, int? parentCategoryId = null) {
+		public static async Task<TopicListReturn> ListAll(Api api, int categoryId, int? parentCategoryId = null, int? page = null)
+        {
+            var categoryParam = categoryId.ToString();
+            if (page != null)
+                categoryParam += $"?page={page}";
+
 			return await api.GetAsync<TopicListReturn>(parentCategoryId > 0 ?
-				Api.Combine("c", (int)parentCategoryId, categoryId) : Api.Combine("c", categoryId));
+				Api.Combine("c", (int)parentCategoryId, categoryParam) : Api.Combine("c", categoryParam));
 		}
 
 		public static async Task<Post> Create(Api api, int categoryId, string title, string message, 
