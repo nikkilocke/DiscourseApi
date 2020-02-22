@@ -83,5 +83,13 @@ namespace DiscourseApi {
 			data["post[raw]"] = message;
 			return await api.PutAsync<Post>(Api.Combine("posts", postId), null, data);
 		}
+
+		/// <summary>
+		/// Causes a post (topic or reply) to be rebuilt. Can help fix broken image issues.
+		/// </summary>
+        public static async Task<JObject> RebuildHtml(Api api, int postId)
+        {
+            return await api.PutAsync(Api.Combine("posts", postId, "rebake"));
+		}
     }
 }
