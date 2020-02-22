@@ -59,16 +59,16 @@ namespace DiscourseApi {
 		public int reviewable_score_count;
 		public int reviewable_score_pending_count;
 
-		static public async Task<PostStream> GetAll(Api api, int topicId) {
+		public static async Task<PostStream> GetAll(Api api, int topicId) {
 			JObject j = await api.GetAsync(Api.Combine("t", topicId, "posts"));
 			return j["post_stream"].ToObject<PostStream>();
 		}
 
-		static public async Task<Post> Get(Api api, int postId) {
+		public static async Task<Post> Get(Api api, int postId) {
 			return await api.GetAsync<Post>(Api.Combine("posts", postId));
 		}
 
-		static public async Task<Post> Create(Api api, int topicId, string message,
+		public static async Task<Post> Create(Api api, int topicId, string message,
 				string api_username = null, DateTime? created_at = null) {
 			return await api.PostAsync<Post>("posts", null, new {
 				topic_id = topicId,
@@ -78,13 +78,10 @@ namespace DiscourseApi {
 			});
 		}
 
-		static public async Task<Post> Update(Api api, int postId, string message) {
+		public static async Task<Post> Update(Api api, int postId, string message) {
 			JObject data = new JObject();
 			data["post[raw]"] = message;
 			return await api.PutAsync<Post>(Api.Combine("posts", postId), null, data);
 		}
-
-	}
-
-
+    }
 }
