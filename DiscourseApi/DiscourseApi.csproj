@@ -8,10 +8,10 @@
     <PackageProjectUrl>https://github.com/nikkilocke/DiscourseApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikkilocke/DiscourseApi</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Added User.Delete</PackageReleaseNotes>
+    <PackageReleaseNotes>LastRequest and LastResponse returned in Exceptions thrown, rather than always logged when there is an error.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.23</Version>
-    <AssemblyVersion>1.0.23.0</AssemblyVersion>
+    <Version>1.0.24</Version>
+    <AssemblyVersion>1.0.24.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

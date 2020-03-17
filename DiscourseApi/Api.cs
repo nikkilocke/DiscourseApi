@@ -36,6 +36,11 @@ namespace DiscourseApi {
 		}
 
 		/// <summary>
+		/// HttpClient, so you can set a timeeout for long operations
+		/// </summary>
+		public HttpClient Client { get { return _client; } }
+
+		/// <summary>
 		/// The Settings object to use for this Api instance.
 		/// </summary>
 		public ISettings Settings;
@@ -409,10 +414,10 @@ namespace DiscourseApi {
 				IEnumerable<string> values;
 				if (result.Headers.TryGetValues("Last-Modified", out values)) metadata["Modified"] = values.FirstOrDefault();
 				j["MetaData"] = metadata;
-				if (Settings.LogResult > 0 || !result.IsSuccessStatusCode)
+				if (Settings.LogResult > 0)
 					Log("Received Data -> " + j);
 				if (!result.IsSuccessStatusCode)
-					throw new ApiException(result.ReasonPhrase, j);
+					throw new ApiException(this, result.ReasonPhrase);
 				return j;
 			} catch (Exception ex) {
 				Error($"{ex.Message}\n{LastRequest}\n{LastResponse}");
@@ -425,10 +430,10 @@ namespace DiscourseApi {
 		/// If it is an ApiEntry, and error is not empty, throw an exception.
 		/// </summary>
 		/// <typeparam name="T">Object to convert to</typeparam>
-		static T convertTo<T>(JObject j) where T : new() {
+		T convertTo<T>(JObject j) where T : new() {
 			T t = j.ConvertToObject<T>();
 			if (t is ApiEntry e && e.Error)
-				throw new ApiException(e.MetaData.Error.message, j);
+				throw new ApiException(this, e.MetaData.Error.message);
 			return t;
 		}
 
@@ -448,20 +453,18 @@ namespace DiscourseApi {
 	/// Exception to hold more information when an API call fails
 	/// </summary>
 	public class ApiException : ApplicationException {
-		static string getMessage(string message, JObject result) {
-			if(result != null) {
-				JToken errors = result["errors"];
-				if(errors != null && errors.Type == JTokenType.Array)
-					message += ":" + string.Join(";", ((JArray)errors).Select(j => j.ToString()));
-			}
-			return message;
+		public ApiException(Api api, Exception ex) : base(ex.Message, ex) {
+			Request = api.LastRequest;
+			Response = api.LastResponse;
 		}
-		public ApiException(string message, JObject result) : base(getMessage(message, result)) {
-			Result = result;
+		public ApiException(Api api, string message) : base(message) {
+			Request = api.LastRequest;
+			Response = api.LastResponse;
 		}
-		public JObject Result { get; private set; }
+		public string Request { get; private set; }
+		public string Response { get; private set; }
 		public override string ToString() {
-			return base.ToString() + "\r\nResult = " + Result;
+			return base.ToString() + "\r\nRequest = " + Request + "\r\nResult = " + Response;
 		}
 	}
 }
