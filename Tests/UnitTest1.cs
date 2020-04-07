@@ -127,7 +127,7 @@ namespace Tests {
 	public class TopicTests : TestBase {
 		[TestMethod]
 		public void List() {
-			RunTest(Topic.ListAll(Api, Settings.TestCategory));
+			ShowList<Topic, TopicListReturn>(Topic.ListAll(Api, Settings.TestCategory, true));
 		}
 		[TestMethod]
 		public void Get() {

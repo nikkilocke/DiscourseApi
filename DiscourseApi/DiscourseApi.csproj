@@ -8,10 +8,10 @@
     <PackageProjectUrl>https://github.com/nikkilocke/DiscourseApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikkilocke/DiscourseApi</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>LastRequest and LastResponse returned in Exceptions thrown, rather than always logged when there is an error.</PackageReleaseNotes>
+    <PackageReleaseNotes>Topic.ListAll added option not to include subcategories, and made it return an ApiList so you could get more than 1 page.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.24</Version>
-    <AssemblyVersion>1.0.24.0</AssemblyVersion>
+    <Version>1.0.25</Version>
+    <AssemblyVersion>1.0.25.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

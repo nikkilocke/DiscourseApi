@@ -22,10 +22,36 @@ namespace DiscourseApi {
 		public List<Topic> topics;
 	}
 
-	public class TopicListReturn : ApiEntry {
+	public class TopicListReturn : ApiList<Topic> {
 		public List<TopicUser> users;
 		public JToken[] primary_groups;
 		public TopicList topic_list;
+		override public int RetrievedCount { get { return perPage * page; } }
+		override public string NextPageUrl {
+			get {
+				if (!HasMoreData)
+					return null;
+				return Api.AddGetParams(MetaData.Uri, new {
+					page = page + 1
+				});
+			}
+			set { }
+		}
+		/// <summary>
+		/// There is data on the server we haven't fetched yet
+		/// </summary>
+		override public bool HasMoreData {
+			get { return List.Count == perPage; }
+		}
+
+		public override ApiList<Topic> Convert(JObject j) {
+			TopicListReturn result = j.ConvertToObject<TopicListReturn>();
+			if (Api.QueryParams(result.MetaData.Uri).TryGetValue("page", out string p))
+				result.page = int.Parse(p);
+			result.perPage = result.topic_list.per_page;
+			result.List = result.topic_list.topics;
+			return result;
+		}
 	}
 
 	public class LinkCount : ApiEntryBase {
@@ -173,9 +199,13 @@ namespace DiscourseApi {
 		public string last_poster_username;
 		public List<JToken> posters;
 
-		static public async Task<TopicListReturn> ListAll(Api api, int categoryId, int? parentCategoryId = null) {
-			return await api.GetAsync<TopicListReturn>(parentCategoryId > 0 ?
-				Api.Combine("c", (int)parentCategoryId, categoryId) : Api.Combine("c", categoryId));
+		static public async Task<TopicListReturn> ListAll(Api api, int categoryId, bool includeSubCategories = false, int page = 0) {
+			JObject j = new JObject();
+			j["page"] = page;
+			if (!includeSubCategories)
+				j["no_subcategories"] = "true";
+			JObject data = await api.GetAsync(Api.Combine("c", categoryId), j);
+			return (TopicListReturn)new TopicListReturn().Convert(data);
 		}
 
 		static public async Task<Post> Create(Api api, int categoryId, string title, string message, 

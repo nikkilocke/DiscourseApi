@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -84,6 +85,12 @@ namespace DiscourseApi {
 		/// Larger numbers give more verbose logging.
 		/// </summary>
 		public int LogResult { get; set; }
+
+		/// <summary>
+		/// Any unexpected json items returned will be in here
+		/// </summary>
+		[JsonExtensionData]
+		public IDictionary<string, JToken> AdditionalData;
 
 		[JsonIgnore]
 		public string Filename;
