@@ -396,10 +396,15 @@ namespace DiscourseApi {
 		async Task<JObject> parseJObjectFromResponse(string uri, HttpResponseMessage result) {
 			try {
 				JObject j = null;
+				string message = result.ReasonPhrase;
 				string data = await result.Content.ReadAsStringAsync();
 				LastResponse += "\n" + data;
+				JObject metadata = new JObject();
 				if (data.StartsWith("{")) {
 					j = JObject.Parse(data);
+					JToken errors = j["errors"];
+					if (errors != null && errors.Type == JTokenType.Array)
+						message += ":" + string.Join(";", ((JArray)errors).Select(m => m.ToString()));
 				} else if (data.StartsWith("[")) {
 					j = new JObject {
 						["List"] = JArray.Parse(data)
@@ -409,7 +414,6 @@ namespace DiscourseApi {
 					if (!string.IsNullOrEmpty(data))
 						j["content"] = data;
 				}
-				JObject metadata = new JObject();
 				metadata["Uri"] = uri;
 				IEnumerable<string> values;
 				if (result.Headers.TryGetValues("Last-Modified", out values)) metadata["Modified"] = values.FirstOrDefault();
@@ -417,7 +421,7 @@ namespace DiscourseApi {
 				if (Settings.LogResult > 0)
 					Log("Received Data -> " + j);
 				if (!result.IsSuccessStatusCode)
-					throw new ApiException(this, result.ReasonPhrase);
+					throw new ApiException(this, message);
 				return j;
 			} catch (Exception ex) {
 				Error($"{ex.Message}\n{LastRequest}\n{LastResponse}");
