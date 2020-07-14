@@ -135,8 +135,12 @@ namespace DiscourseApi {
 		public string cannot_delete_reason;
 		public int[] subcategory_ids;
 
-		static public async Task<CategoryListReturn> ListAll(Api api) {
-			return await api.GetAsync<CategoryListReturn>("categories");
+		static public async Task<CategoryListReturn> ListAll(Api api, object query = null) {
+			return await api.GetAsync<CategoryListReturn>("categories", query);
+		}
+
+		static public async Task<CategoryListReturn> ListSubcategories(Api api, int parent_category_id) {
+			return await ListAll(api, new { parent_category_id });
 		}
 
 		static public async Task<Category> Create(Api api, UpdateCategoryParams data) {
