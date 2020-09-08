@@ -8,10 +8,10 @@
     <PackageProjectUrl>https://github.com/nikkilocke/DiscourseApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikkilocke/DiscourseApi</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>New call to list subcategories of a parent (Discourse no longer returns them in subcategory_ids)</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix bug where associated_accounts was declared wrongly.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.27</Version>
-    <AssemblyVersion>1.0.27.0</AssemblyVersion>
+    <Version>1.0.28</Version>
+    <AssemblyVersion>1.0.28.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

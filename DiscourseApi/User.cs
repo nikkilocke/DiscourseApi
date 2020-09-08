@@ -210,7 +210,7 @@ namespace DiscourseApi {
 	public class UserEmails : ApiEntryBase {
 		public string email;
 		public string[] secondary_emails;
-		public string[] associated_accounts;
+		public JToken[] associated_accounts;
 	}
 
 	public class User : UserCommon {
