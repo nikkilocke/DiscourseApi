@@ -8,10 +8,10 @@
     <PackageProjectUrl>https://github.com/nikkilocke/DiscourseApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikkilocke/DiscourseApi</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Fix bug where associated_accounts was declared wrongly.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix bug where Moved response code wasn't processed.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.28</Version>
-    <AssemblyVersion>1.0.28.0</AssemblyVersion>
+    <Version>1.0.29</Version>
+    <AssemblyVersion>1.0.29.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

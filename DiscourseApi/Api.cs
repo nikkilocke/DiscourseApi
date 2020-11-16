@@ -357,6 +357,7 @@ namespace DiscourseApi {
 						Log($"Received -> {result}");
 					switch (result.StatusCode) {
 						case HttpStatusCode.Found:      // Redirect
+						case HttpStatusCode.Moved:
 							uri = result.Headers.Location.AbsoluteUri;
 							delay = 1;
 							break;
